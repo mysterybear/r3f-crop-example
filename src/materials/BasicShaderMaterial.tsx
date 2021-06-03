@@ -4,6 +4,8 @@ import glsl from "glslify"
 import * as THREE from "three"
 import fragmentShader from "../shaders/fragment.glsl"
 import vertexShader from "../shaders/vertex.glsl"
+import { animated } from "@react-spring/three"
+import { forwardRef } from "react"
 
 export const BasicShaderMaterial = shaderMaterial(
   {
@@ -28,3 +30,9 @@ declare global {
     }
   }
 }
+
+export const AnimatedBasicShaderMaterial = animated(
+  forwardRef<BasicShaderMaterialImpl, any>((props, ref) => (
+    <basicShaderMaterial ref={ref} {...props} />
+  ))
+)
