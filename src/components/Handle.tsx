@@ -22,7 +22,7 @@ const Handle = animated(
     return (
       <mesh {...props}>
         <circleBufferGeometry args={[radius, segments, thetaStart, thetaEnd]} />
-        <meshBasicMaterial color="green" wireframe />
+        <meshBasicMaterial color="green" transparent opacity={0} />
       </mesh>
     )
   }

@@ -45,6 +45,7 @@
     "fp-ts": "^2.10.5",
     "fs-extra": "^9.0.1",
     "glsl-earth": "^1.0.2",
+    "glsl-gamma": "^2.0.0",
     "glslify": "^7.1.1",
     "glslify-loader": "^2.0.0",
     "html-webpack-plugin": "4.5.0",

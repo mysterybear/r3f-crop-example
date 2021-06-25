@@ -7,7 +7,7 @@ import { clamp as fpClamp } from "fp-ts/Ord"
 import produce from "immer"
 import { useEffect, useState } from "react"
 import * as THREE from "three"
-import "../materials/BasicShaderMaterial"
+import { AnimatedImageMaterial } from "../materials/ImageMaterial"
 import { State } from "../types"
 import Handle from "./Handle"
 
@@ -16,7 +16,11 @@ const { PI: pi } = Math
 
 const Image = ({ src, width, height }: State) => {
   const texture = useLoader(THREE.TextureLoader, src)
-  const cropHandleLength = 0.5
+  const cropHandleProps = {
+    color: new THREE.Color("green"),
+    length: 0.5,
+    thickness: 0.1,
+  }
   const [_inset, _setInset] = useState([0, 0, 0, 0])
   const [dragging, setDragging] = useState(-1)
 
@@ -73,7 +77,16 @@ const Image = ({ src, width, height }: State) => {
   return (
     <mesh>
       <planeBufferGeometry args={[width, height]} />
-      <basicShaderMaterial uniforms-u_texture-value={texture} />
+      <AnimatedImageMaterial
+        uniforms-u_texture-value={texture}
+        uniforms-u_inset-value={inset}
+        uniforms-u_handle_color-value={cropHandleProps.color}
+        uniforms-u_handle_thickness-value={[
+          cropHandleProps.thickness / width,
+          cropHandleProps.thickness / height,
+        ]}
+        uniforms-u_handle_length-value={cropHandleProps.length}
+      />
       <Handle
         radius={width / 2}
         position-x={to(
@@ -82,8 +95,14 @@ const Image = ({ src, width, height }: State) => {
         )}
         position-y={to([inset], ([t]) => height / 2 - height * t)}
         position-z={0}
-        scale-x={to([inset], ([t, r, b, l]) => cropHandleLength - (l + r) / 2)}
-        scale-y={to([inset], ([t, r, b, l]) => cropHandleLength - (t + b) / 2)}
+        scale-x={to(
+          [inset],
+          ([t, r, b, l]) => cropHandleProps.length - (l + r) / 2
+        )}
+        scale-y={to(
+          [inset],
+          ([t, r, b, l]) => cropHandleProps.length - (t + b) / 2
+        )}
         thetaStart={pi}
         {...(handleBind(handleOp(0)) as any)}
         {...hoverProps}
@@ -97,8 +116,14 @@ const Image = ({ src, width, height }: State) => {
         )}
         position-z={0}
         thetaStart={pi / 2}
-        scale-x={to([inset], ([t, r, b, l]) => cropHandleLength - (l + r) / 2)}
-        scale-y={to([inset], ([t, r, b, l]) => cropHandleLength - (t + b) / 2)}
+        scale-x={to(
+          [inset],
+          ([t, r, b, l]) => cropHandleProps.length - (l + r) / 2
+        )}
+        scale-y={to(
+          [inset],
+          ([t, r, b, l]) => cropHandleProps.length - (t + b) / 2
+        )}
         {...(handleBind(handleOp(1)) as any)}
         {...hoverProps}
       />
@@ -110,8 +135,14 @@ const Image = ({ src, width, height }: State) => {
         )}
         position-y={to([inset], ([t, r, b]) => -height / 2 + height * b)}
         position-z={0}
-        scale-x={to([inset], ([t, r, b, l]) => cropHandleLength - (l + r) / 2)}
-        scale-y={to([inset], ([t, r, b, l]) => cropHandleLength - (t + b) / 2)}
+        scale-x={to(
+          [inset],
+          ([t, r, b, l]) => cropHandleProps.length - (l + r) / 2
+        )}
+        scale-y={to(
+          [inset],
+          ([t, r, b, l]) => cropHandleProps.length - (t + b) / 2
+        )}
         thetaStart={0}
         {...(handleBind(handleOp(2)) as any)}
         {...hoverProps}
@@ -125,8 +156,14 @@ const Image = ({ src, width, height }: State) => {
         )}
         position-z={0}
         thetaStart={(pi / 2) * 3}
-        scale-x={to([inset], ([t, r, b, l]) => cropHandleLength - (l + r) / 2)}
-        scale-y={to([inset], ([t, r, b, l]) => cropHandleLength - (t + b) / 2)}
+        scale-x={to(
+          [inset],
+          ([t, r, b, l]) => cropHandleProps.length - (l + r) / 2
+        )}
+        scale-y={to(
+          [inset],
+          ([t, r, b, l]) => cropHandleProps.length - (t + b) / 2
+        )}
         {...(handleBind(handleOp(3)) as any)}
         {...hoverProps}
       />
