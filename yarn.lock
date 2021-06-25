@@ -2085,17 +2085,17 @@
     "@typescript-eslint/types" "4.15.2"
     eslint-visitor-keys "^2.0.0"
 
-"@use-gesture/core@^10.0.0-beta.9":
-  version "10.0.0-beta.9"
-  resolved "https://registry.yarnpkg.com/@use-gesture/core/-/core-10.0.0-beta.9.tgz#74dee68d00ac743214aa9803465e58bede5a2a5c"
-  integrity sha512-f/pMyGjHJhcTeRfQyfNsqlO8Kjy0LAzk105kYjguoDYUa75Aa3Cz5VuL2RltD1s8EaPnhqb/FoNoVOAS8ugN5Q==
+"@use-gesture/core@^10.0.0-beta.13":
+  version "10.0.0-beta.13"
+  resolved "https://registry.yarnpkg.com/@use-gesture/core/-/core-10.0.0-beta.13.tgz#bb3d7e00a719884261629b46aef1f764ba92933b"
+  integrity sha512-WRw7LHrvw2GL5rHfqHu2OKeurXRIbeiBehSxAYb7J2G2AxascD2lIO5SI1Ce930RT5qRRzFhU+IReg+MdsQ+7w==
 
-"@use-gesture/react@^10.0.0-beta.9":
-  version "10.0.0-beta.9"
-  resolved "https://registry.yarnpkg.com/@use-gesture/react/-/react-10.0.0-beta.9.tgz#e2a550f4436a8deaf41a353fbbacd64746bccb22"
-  integrity sha512-vkhy2bmXo0sF3xaWCjVhIbDNt7Ck7FfDtMvsJRiS56CX5ElKWnTp3X4mqhURjAiiK0ws9Cq5iZw21px4E5DYLA==
+"@use-gesture/react@^10.0.0-beta.13":
+  version "10.0.0-beta.13"
+  resolved "https://registry.yarnpkg.com/@use-gesture/react/-/react-10.0.0-beta.13.tgz#da93f49b4509be9bd0dbfe6858425f8274b3b3a9"
+  integrity sha512-60aiYDWZv3nyLMGiCGyvWIPXPQyEj/2VujxyOH8+Zj/cUrY9TasP8pm+mDvoAT5UEHEIqJXrCXx4duPy0LjcUg==
   dependencies:
-    "@use-gesture/core" "^10.0.0-beta.9"
+    "@use-gesture/core" "^10.0.0-beta.13"
 
 "@webassemblyjs/ast@1.9.0":
   version "1.9.0"
@@ -5256,6 +5256,11 @@ forwarded@~0.1.2:
   resolved "https://registry.yarnpkg.com/forwarded/-/forwarded-0.1.2.tgz#98c23dab1175657b8c0573e8ceccd91b0ff18c84"
   integrity sha1-mMI9qxF1ZXuMBXPozszZGw/xjIQ=
 
+fp-ts@^2.10.5:
+  version "2.10.5"
+  resolved "https://registry.yarnpkg.com/fp-ts/-/fp-ts-2.10.5.tgz#7c77868fe8bd9b229743303c1bec505b959f631b"
+  integrity sha512-X2KfTIV0cxIk3d7/2Pvp/pxL/xr2MV1WooyEzKtTWYSc1+52VF4YzjBTXqeOlSiZsPCxIBpDGfT9Dyo7WEY0DQ==
+
 fragment-cache@^0.2.1:
   version "0.2.1"
   resolved "https://registry.yarnpkg.com/fragment-cache/-/fragment-cache-0.2.1.tgz#4290fad27f13e89be7f33799c6bc5a0abfff0d19"
@@ -5990,6 +5995,11 @@ immer@8.0.1:
   version "8.0.1"
   resolved "https://registry.yarnpkg.com/immer/-/immer-8.0.1.tgz#9c73db683e2b3975c424fb0572af5889877ae656"
   integrity sha512-aqXhGP7//Gui2+UrEtvxZxSquQVXTpZ7KDxfCcKAF3Vysvw0CViVaW9RZ1j1xlIYqaaaipBoqdqeibkc18PNvA==
+
+immer@^9.0.3:
+  version "9.0.3"
+  resolved "https://registry.yarnpkg.com/immer/-/immer-9.0.3.tgz#146e2ba8b84d4b1b15378143c2345559915097f4"
+  integrity sha512-mONgeNSMuyjIe0lkQPa9YhdmTv8P19IeHV0biYhcXhbd5dhdB9HSK93zBpyKjp6wersSUgT5QyU0skmejUVP2A==
 
 import-cwd@^2.0.0:
   version "2.1.0"
