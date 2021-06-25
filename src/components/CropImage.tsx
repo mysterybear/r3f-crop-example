@@ -5,17 +5,22 @@ import { pipe } from "fp-ts/function"
 import { Ord } from "fp-ts/number"
 import { clamp as fpClamp } from "fp-ts/Ord"
 import produce from "immer"
-import { useEffect, useState } from "react"
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react"
 import * as THREE from "three"
 import { AnimatedImageMaterial } from "../materials/ImageMaterial"
 import { State } from "../types"
 import Handle from "./Handle"
+import useEventListener from "@use-it/event-listener"
+import { EXECUTE_CROP_EVENT, RESET_INSET_EVENT } from "../events"
 
 const clamp = fpClamp(Ord)
 const { PI: pi } = Math
 
-const Image = ({ src, width, height }: State) => {
+type Props = State & { set: Dispatch<SetStateAction<State>> }
+
+const CropImage = ({ src, width, height, set }: Props) => {
   const texture = useLoader(THREE.TextureLoader, src)
+  const htmlImage = useRef(new Image())
   const cropHandleProps = {
     color: new THREE.Color("green"),
     length: 0.5,
@@ -24,12 +29,15 @@ const Image = ({ src, width, height }: State) => {
   const [_inset, _setInset] = useState([0, 0, 0, 0])
   const [dragging, setDragging] = useState(-1)
 
-  const [{ inset }, spring] = useSpring(
-    () => ({
-      inset: _inset,
-    }),
-    [_inset]
-  )
+  const [{ inset }, spring] = useSpring(() => ({
+    inset: _inset,
+  }))
+
+  useEffect(() => {
+    htmlImage.current.crossOrigin = "anonymous"
+    htmlImage.current.src = src
+    spring.start({ inset: [0, 0, 0, 0], immediate: true })
+  }, [src, spring])
 
   const factor = useThree((three) => three.viewport.factor)
 
@@ -53,9 +61,9 @@ const Image = ({ src, width, height }: State) => {
         draft[ord] = clamp(0, 1)(_inset[ord] + s * d[(ord + 1) % 2])
       })
       if (down) {
-        spring.start({ inset: next })
+        spring.start({ inset: next, immediate: false })
       } else {
-        await spring.start({ inset: next })
+        await spring.start({ inset: next, immediate: false })
         _setInset(next)
         setDragging(-1)
       }
@@ -72,6 +80,53 @@ const Image = ({ src, width, height }: State) => {
   useEffect(
     () => void (document.body.style.cursor = hovered ? "grab" : "auto"),
     [hovered]
+  )
+  function executeCrop() {
+    const canvas = document.createElement("canvas"),
+      ctx = canvas.getContext("2d")
+    if (!ctx) throw new Error("Couldn't get a 2D canvas")
+
+    const [t, r, b, l] = inset.get()
+    const img = htmlImage.current
+
+    const crop = {
+      width: img.width - (l * img.width + r * img.width),
+      height: img.height - (t * img.height + b * img.height),
+      left: l * img.width,
+      top: t * img.height,
+    }
+
+    ctx.canvas.width = crop.width
+    ctx.canvas.height = crop.height
+    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height)
+
+    const { sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight } = {
+      sx: l * img.width,
+      sy: t * img.height,
+      sWidth: crop.width,
+      sHeight: crop.height,
+      dx: 0,
+      dy: 0,
+      dWidth: crop.width,
+      dHeight: crop.height,
+    }
+
+    ctx.drawImage(img, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight)
+    const nextImageSrc = ctx.canvas.toDataURL("image/png")
+    const nextImage = new Image(crop.width, crop.height)
+    nextImage.src = nextImageSrc
+
+    set({
+      src: nextImageSrc,
+      width: width * (1 - (l + r)),
+      height: height * (1 - (t + b)),
+    })
+  }
+
+  useEventListener(EXECUTE_CROP_EVENT, executeCrop)
+  useEventListener(
+    RESET_INSET_EVENT,
+    () => void spring.start({ inset: [0, 0, 0, 0] })
   )
 
   return (
@@ -171,4 +226,4 @@ const Image = ({ src, width, height }: State) => {
   )
 }
 
-export default Image
+export default CropImage

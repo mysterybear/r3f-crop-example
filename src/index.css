@@ -18,6 +18,12 @@ code {
   height: 100%;
 }
 
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
 canvas {
   touch-action: none;
 }
