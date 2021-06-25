@@ -1,43 +1,42 @@
-import { useSpring } from "@react-spring/three"
-import { useFrame, useThree } from "@react-three/fiber"
-import { useDrag } from "@use-gesture/react"
-import { useRef } from "react"
+import { Canvas, useLoader } from "@react-three/fiber"
+import { Fragment, Suspense, useState } from "react"
 import "../materials/BasicShaderMaterial"
-import {
-  AnimatedBasicShaderMaterial,
-  BasicShaderMaterialImpl,
-} from "../materials/BasicShaderMaterial"
+import * as THREE from "three"
+
+export type State = {
+  src: string
+  width: number
+  height: number
+}
+
+const initialState: State = {
+  src: "https://images.unsplash.com/photo-1613910117442-b7ef140b37f5",
+  width: 8,
+  height: 6,
+}
+
+const Image = ({ src, width, height }: State) => {
+  const texture = useLoader(THREE.TextureLoader, src)
+  return (
+    <mesh>
+      <planeBufferGeometry args={[width, height]} />
+      <basicShaderMaterial uniforms-u_texture-value={texture} />
+    </mesh>
+  )
+}
 
 const App = () => {
-  const ref = useRef<BasicShaderMaterialImpl>(null)
-
-  const [{ offset }, spring] = useSpring(() => ({
-    offset: [0, 0],
-    immediate: true,
-  }))
-
-  const factor = useThree((three) => three.viewport.factor)
-
-  const bind = useDrag(
-    ({ offset }) => {
-      spring.start({ offset })
-    },
-    { transform: ([x, y]) => [x / factor, -y / factor] }
-  )
-
-  useFrame(({ clock }) => {
-    const material = ref.current
-    if (!material) return
-    if (material.uniforms?.u_time) {
-      material.uniforms.u_time.value = clock.getElapsedTime()
-    }
-  })
-
+  const [state] = useState(initialState)
   return (
-    <mesh {...(bind() as any)}>
-      <planeBufferGeometry args={[4, 4]} />
-      <AnimatedBasicShaderMaterial ref={ref} uniforms-u_offset-value={offset} />
-    </mesh>
+    <Fragment>
+      <div className="full-screen">
+        <Canvas>
+          <Suspense fallback={null}>
+            <Image {...state} />
+          </Suspense>
+        </Canvas>
+      </div>
+    </Fragment>
   )
 }
 

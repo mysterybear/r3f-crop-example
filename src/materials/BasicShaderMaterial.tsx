@@ -9,16 +9,14 @@ import { forwardRef } from "react"
 
 export const BasicShaderMaterial = shaderMaterial(
   {
-    u_time: 0,
-    u_offset: new THREE.Vector2(),
+    u_texture: new THREE.Texture(),
   },
   glsl(vertexShader),
   glsl(fragmentShader)
 )
 
 export type BasicShaderMaterialImpl = {
-  u_time?: { value: number }
-  u_offset?: { value: THREE.Vector2 }
+  u_texture?: { value: THREE.Texture }
 } & JSX.IntrinsicElements["shaderMaterial"]
 
 extend({ BasicShaderMaterial })
